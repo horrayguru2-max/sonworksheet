@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buku Latihan BM K2</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f9f8f6;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:20px;color:#1a1a1a}
+#app{max-width:720px;margin:0 auto;background:#fff;border-radius:16px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+h1{font-size:18px;font-weight:600;margin-bottom:4px;color:#1a1a1a}
+.subtitle{font-size:13px;color:#888;margin-bottom:18px}
+.ubar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid #eee}
+.ubtn{padding:6px 12px;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer;font-size:12px;color:#555;font-family:inherit}
+.ubtn:hover{background:#f5f5f5}
+.ubtn.on{background:#dbeafe;color:#1d4ed8;border-color:transparent;font-weight:600}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.ulbl{font-size:11px;color:#aaa;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+.stag{background:#fef3c7;color:#92400e;font-size:12px;padding:3px 10px;border-radius:8px;font-weight:600}
+.ph{margin-bottom:14px}
+.ph-t{font-size:18px;font-weight:600;color:#111;margin-bottom:3px}
+.ph-s{font-size:13px;color:#888}
+.passage{background:#f5f5f3;border-radius:10px;padding:13px 16px;margin-bottom:13px;font-size:15px;line-height:1.75;color:#222}
+.qcard{background:#fff;border:1px solid #eee;border-radius:14px;padding:15px 18px;margin-bottom:10px}
+.qi{font-size:38px;display:block;margin-bottom:7px;line-height:1.2}
+.qt{font-size:15px;font-weight:600;color:#111;margin-bottom:10px}
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opt{padding:9px 16px;border:1px solid #ddd;border-radius:9px;background:#fff;cursor:pointer;font-size:14px;color:#333;font-family:inherit;transition:background .15s}
+.opt:not(:disabled):hover{background:#f0f0f0}
+.opt.good{background:#dcfce7;color:#15803d;border-color:transparent;font-weight:600}
+.opt.bad{background:#fee2e2;color:#b91c1c;border-color:transparent}
+.fb{font-size:13px;margin-top:9px;font-weight:600}
+.fb.ok{color:#15803d}.fb.no{color:#b91c1c}
+.wa{margin-top:11px}
+.wa-lbl{font-size:12px;color:#888;margin-bottom:5px}
+.wa-in{width:100%;border:1px solid #ddd;border-radius:9px;padding:9px 13px;font-size:15px;background:#fafafa;color:#111;font-family:inherit;outline:none}
+.wa-in:focus{border-color:#93c5fd;background:#fff}
+.pnav{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:14px;border-top:1px solid #eee}
+.nbtn{padding:8px 20px;border:1px solid #ddd;border-radius:9px;background:#fff;cursor:pointer;font-size:13px;color:#333;font-family:inherit}
+.nbtn:hover:not(:disabled){background:#f5f5f5}
+.nbtn:disabled{opacity:.3;cursor:default}
+.pdots{display:flex;gap:6px;align-items:center}
+.dot{width:8px;height:8px;border-radius:50%;background:#ddd}
+.dot.on{background:#555}
+</style>
+</head>
+<body>
+<div id="app">
+  <h1>📚 Buku Latihan BM — K2</h1>
+  <p class="subtitle">Pilih unit di bawah untuk mula belajar!</p>
+  <div class="ubar" id="ubar"></div>
+  <div id="con"></div>
+</div>
+
+<script>
+var W=[
+{id:"u1",lbl:"Unit 1",title:"Hendak Pakai Apa",em:"👕",pages:[
+{type:"vocab",title:"🔤 Kenali Kata!",sub:"Lihat gambar dan pilih jawapan yang betul.",qs:[
+{img:"🌂",q:"Ini ialah ___",opts:["payung","kasut","topi"],ans:0,wp:"Tulis perkataan yang betul:"},
+{img:"👒",q:"Ini ialah ___",opts:["baju","topi","seluar"],ans:1,wp:"Tulis perkataan yang betul:"},
+{img:"🧥",q:"Ini ialah ___",opts:["kasut","stokin","jaket"],ans:2,wp:"Tulis perkataan yang betul:"}
+]},
+{type:"think",title:"🧠 Permainan Fikir!",sub:"Fikir dengan teliti dan pilih jawapan yang betul.",qs:[
+{img:"🌧️",q:"Hari hujan. Apa yang perlu dibawa?",opts:["payung","topi matahari","selipar"],ans:0,wp:"Tulis jawapan:"},
+{img:"🏫",q:"Mana yang TIDAK sesuai dipakai ke sekolah?",opts:["baju sekolah","stokin","baju tidur"],ans:2,wp:"Tulis jawapan:"},
+{img:"☀️",q:"Hari panas. Apa yang sesuai dipakai?",opts:["jaket tebal","baju lengan pendek","stokin tebal"],ans:1,wp:"Tulis jawapan:"}
+]},
+{type:"read",title:"📖 Baca & Jawab!",sub:"Baca cerita dengan teliti, kemudian jawab soalan.",passage:"Hari ini hujan lebat. Siti pakai jaket kuning. Dia bawa payung biru ke sekolah.",qs:[
+{q:"Apa cuaca hari ini?",opts:["panas","hujan","berangin"],ans:1,wp:"Tulis jawapan:"},
+{q:"Apa warna jaket Siti?",opts:["merah","biru","kuning"],ans:2,wp:"Tulis jawapan:"},
+{q:"Apa yang dibawa Siti?",opts:["beg","payung","topi"],ans:1,wp:"Tulis jawapan:"}
+]}
+]},
+{id:"u2",lbl:"Unit 2",title:"Di Pasar Pagi",em:"🛒",pages:[
+{type:"vocab",title:"🔤 Kenali Kata!",sub:"Lihat gambar dan pilih jawapan yang betul.",qs:[
+{img:"🥦",q:"Ini ialah ___",opts:["buah","sayur","ikan"],ans:1,wp:"Tulis perkataan yang betul:"},
+{img:"🐟",q:"Ini ialah ___",opts:["ayam","telur","ikan"],ans:2,wp:"Tulis perkataan yang betul:"},
+{img:"🧺",q:"Bekas untuk bawa barang dipanggil ___",opts:["bakul","beg sekolah","kotak"],ans:0,wp:"Tulis perkataan yang betul:"}
+]},
+{type:"think",title:"🧠 Permainan Fikir!",sub:"Fikir dengan teliti dan pilih jawapan yang betul.",qs:[
+{img:"🏪",q:"Mana yang BOLEH dibeli di pasar pagi?",opts:["sayur dan ikan","kereta mainan","buku tulis"],ans:0,wp:"Tulis jawapan:"},
+{img:"👩‍🍳",q:"Orang yang menjual barang di pasar dipanggil ___",opts:["pembeli","penjual","pengunjung"],ans:1,wp:"Tulis jawapan:"},
+{img:"🥚",q:"Yang mana BUKAN makanan?",opts:["telur","ikan","buku"],ans:2,wp:"Tulis jawapan:"}
+]},
+{type:"read",title:"📖 Baca & Jawab!",sub:"Baca cerita dengan teliti, kemudian jawab soalan.",passage:"Ibu pergi ke pasar pagi. Ibu beli sayur, ikan dan telur. Ibu bayar dengan wang.",qs:[
+{q:"Ibu pergi ke mana?",opts:["sekolah","pasar pagi","zoo"],ans:1,wp:"Tulis jawapan:"},
+{q:"Ibu beli apa?",opts:["baju dan kasut","sayur dan ikan","mainan"],ans:1,wp:"Tulis jawapan:"},
+{q:"Ibu bayar dengan apa?",opts:["kad","wang","cek"],ans:1,wp:"Tulis jawapan:"}
+]}
+]},
+{id:"u3",lbl:"Unit 3",title:"Di Kebun",em:"🌿",pages:[
+{type:"vocab",title:"🔤 Kenali Kata!",sub:"Lihat gambar dan pilih jawapan yang betul.",qs:[
+{img:"🌸",q:"Ini ialah ___",opts:["pokok","bunga","rumput"],ans:1,wp:"Tulis perkataan yang betul:"},
+{img:"🦋",q:"Ini ialah ___",opts:["semut","ulat","kupu-kupu"],ans:2,wp:"Tulis perkataan yang betul:"},
+{img:"💧",q:"Pokok perlu ___ untuk hidup",opts:["gula","pasir","air"],ans:2,wp:"Tulis perkataan yang betul:"}
+]},
+{type:"think",title:"🧠 Permainan Fikir!",sub:"Fikir dengan teliti dan pilih jawapan yang betul.",qs:[
+{img:"🌳",q:"Yang mana BUKAN ada di kebun?",opts:["bunga","pokok","kapal terbang"],ans:2,wp:"Tulis jawapan:"},
+{img:"☔",q:"Apa yang membantu pokok tumbuh?",opts:["ais","air hujan","api"],ans:1,wp:"Tulis jawapan:"},
+{img:"🐛",q:"Haiwan kecil yang tinggal di tanah ialah ___",opts:["zirafah","gajah","ulat"],ans:2,wp:"Tulis jawapan:"}
+]},
+{type:"read",title:"📖 Baca & Jawab!",sub:"Baca cerita dengan teliti, kemudian jawab soalan.",passage:"Ali ada kebun bunga. Dia siram bunga setiap hari. Kupu-kupu suka hinggap di bunga Ali.",qs:[
+{q:"Apa yang Ali siram?",opts:["pokok","bunga","rumput"],ans:1,wp:"Tulis jawapan:"},
+{q:"Siapa yang suka bunga Ali?",opts:["semut","ulat","kupu-kupu"],ans:2,wp:"Tulis jawapan:"},
+{q:"Ali siram bunga berapa kali?",opts:["sekali seminggu","setiap hari","sekali sebulan"],ans:1,wp:"Tulis jawapan:"}
+]}
+]},
+{id:"u4",lbl:"Unit 4",title:"Di Pantai",em:"🏖️",pages:[
+{type:"vocab",title:"🔤 Kenali Kata!",sub:"Lihat gambar dan pilih jawapan yang betul.",qs:[
+{img:"🏖️",q:"Tanah berpasir di tepi laut ialah ___",opts:["sungai","pantai","tasik"],ans:1,wp:"Tulis perkataan yang betul:"},
+{img:"🌊",q:"Ini ialah ___",opts:["pasir","ombak","kerang"],ans:1,wp:"Tulis perkataan yang betul:"},
+{img:"🐚",q:"Ini ialah ___",opts:["batu","pasir","kerang"],ans:2,wp:"Tulis perkataan yang betul:"}
+]},
+{type:"think",title:"🧠 Permainan Fikir!",sub:"Fikir dengan teliti dan pilih jawapan yang betul.",qs:[
+{img:"☀️",q:"Yang mana SESUAI dibawa ke pantai?",opts:["baju sejuk tebal","selipar dan tuala","selimut tebal"],ans:1,wp:"Tulis jawapan:"},
+{img:"🌊",q:"Yang mana BUKAN ada di pantai Malaysia?",opts:["pasir","ombak","salji"],ans:2,wp:"Tulis jawapan:"},
+{img:"🐚",q:"Apa yang boleh dikumpul di tepi pantai?",opts:["batu bata","kerang","buku"],ans:1,wp:"Tulis jawapan:"}
+]},
+{type:"read",title:"📖 Baca & Jawab!",sub:"Baca cerita dengan teliti, kemudian jawab soalan.",passage:"Keluarga Ali pergi ke pantai. Mereka main bola di atas pasir. Air laut sangat biru dan cantik.",qs:[
+{q:"Di mana mereka main bola?",opts:["di laut","di atas pasir","di kebun"],ans:1,wp:"Tulis jawapan:"},
+{q:"Apa warna air laut?",opts:["hijau","merah","biru"],ans:2,wp:"Tulis jawapan:"},
+{q:"Siapa yang pergi ke pantai?",opts:["Keluarga Ali","Keluarga Mei Mei","Keluarga Siti"],ans:0,wp:"Tulis jawapan:"}
+]}
+]},
+{id:"u5",lbl:"Unit 5",title:"Mari Ke Zoo",em:"🦁",pages:[
+{type:"vocab",title:"🔤 Kenali Kata!",sub:"Lihat gambar dan pilih jawapan yang betul.",qs:[
+{img:"🐘",q:"Ini ialah ___",opts:["harimau","gajah","singa"],ans:1,wp:"Tulis perkataan yang betul:"},
+{img:"🦒",q:"Ini ialah ___",opts:["zirafah","monyet","ular"],ans:0,wp:"Tulis perkataan yang betul:"},
+{img:"🐅",q:"Ini ialah ___",opts:["singa","zirafah","harimau"],ans:2,wp:"Tulis perkataan yang betul:"}
+]},
+{type:"think",title:"🧠 Permainan Fikir!",sub:"Fikir dengan teliti dan pilih jawapan yang betul.",qs:[
+{img:"🦁",q:"Yang mana BUKAN haiwan di zoo?",opts:["gajah","roti","harimau"],ans:1,wp:"Tulis jawapan:"},
+{img:"🐅",q:"Haiwan yang paling berbahaya ialah ___",opts:["arnab","harimau","kucing"],ans:1,wp:"Tulis jawapan:"},
+{img:"🐒",q:"Haiwan yang pandai memanjat pokok ialah ___",opts:["ikan","gajah","monyet"],ans:2,wp:"Tulis jawapan:"}
+]},
+{type:"read",title:"📖 Baca & Jawab!",sub:"Baca cerita dengan teliti, kemudian jawab soalan.",passage:"Mei Mei pergi ke zoo bersama ayah. Dia nampak gajah dan zirafah yang tinggi. Mei Mei suka monyet yang comel.",qs:[
+{q:"Siapa yang pergi ke zoo?",opts:["Ali","Mei Mei","Siti"],ans:1,wp:"Tulis jawapan:"},
+{q:"Haiwan apa yang Mei Mei suka?",opts:["gajah","zirafah","monyet"],ans:2,wp:"Tulis jawapan:"},
+{q:"Mei Mei pergi bersama siapa?",opts:["ibu","ayah","abang"],ans:1,wp:"Tulis jawapan:"}
+]}
+]},
+{id:"u6",lbl:"Unit 6",title:"Di Pusat Beli-Belah",em:"🏬",pages:[
+{type:"vocab",title:"🔤 Kenali Kata!",sub:"Lihat gambar dan pilih jawapan yang betul.",qs:[
+{img:"🏬",q:"Tempat kita beli-belah ialah ___",opts:["sekolah","pusat beli-belah","zoo"],ans:1,wp:"Tulis perkataan yang betul:"},
+{img:"🛗",q:"Alat naik turang tingkat dipanggil ___",opts:["tangga","lif","pintu"],ans:1,wp:"Tulis perkataan yang betul:"},
+{img:"💰",q:"Kita guna ___ untuk membeli barang",opts:["buku","wang","kasut"],ans:1,wp:"Tulis perkataan yang betul:"}
+]},
+{type:"think",title:"🧠 Permainan Fikir!",sub:"Fikir dengan teliti dan pilih jawapan yang betul.",qs:[
+{img:"👗",q:"Yang mana BOLEH dibeli di kedai baju?",opts:["baju dan seluar","ikan dan sayur","pokok dan bunga"],ans:0,wp:"Tulis jawapan:"},
+{img:"🏬",q:"Yang mana BUKAN ada di pusat beli-belah?",opts:["kedai baju","kedai makanan","sawah padi"],ans:2,wp:"Tulis jawapan:"},
+{img:"🧸",q:"Nak beli mainan, pergi ke kedai ___",opts:["mainan","roti","ubat"],ans:0,wp:"Tulis jawapan:"}
+]},
+{type:"read",title:"📖 Baca & Jawab!",sub:"Baca cerita dengan teliti, kemudian jawab soalan.",passage:"Keluarga Amin pergi ke pusat beli-belah. Ibu beli baju merah untuk Amin. Amin sangat gembira!",qs:[
+{q:"Apa yang ibu beli?",opts:["kasut biru","baju merah","mainan baru"],ans:1,wp:"Tulis jawapan:"},
+{q:"Bagaimana perasaan Amin?",opts:["sedih","marah","gembira"],ans:2,wp:"Tulis jawapan:"},
+{q:"Baju itu untuk siapa?",opts:["ibu","ayah","Amin"],ans:2,wp:"Tulis jawapan:"}
+]}
+]},
+{id:"tata",lbl:"Tatabahasa",title:"Tatabahasa",em:"📝",pages:[
+{type:"grammar",title:"✏️ Kata Nama Am & Kata Nama Khas",sub:"Pilih jenis perkataan yang betul.",passage:"Kata Nama Am — nama biasa: kucing, sekolah, budak\nKata Nama Khas — nama khas (huruf besar): Ali, Kuala Lumpur, Siti",qs:[
+{img:"🐱",q:"\"kucing\" ialah ___",opts:["Kata Nama Am","Kata Nama Khas"],ans:0,wp:"Tulis jawapan:"},
+{img:"👦",q:"\"Ali\" ialah ___",opts:["Kata Nama Am","Kata Nama Khas"],ans:1,wp:"Tulis jawapan:"},
+{img:"🏫",q:"\"sekolah\" ialah ___",opts:["Kata Nama Am","Kata Nama Khas"],ans:0,wp:"Tulis jawapan:"},
+{img:"🏙️",q:"\"Kuala Lumpur\" ialah ___",opts:["Kata Nama Am","Kata Nama Khas"],ans:1,wp:"Tulis jawapan:"},
+{img:"📚",q:"\"buku\" ialah ___",opts:["Kata Nama Am","Kata Nama Khas"],ans:0,wp:"Tulis jawapan:"}
+]},
+{type:"grammar",title:"✏️ Kata Arah",sub:"Pilih kata arah yang betul.",passage:"atas · bawah · depan · belakang · kiri · kanan · dalam · luar · tepi",qs:[
+{img:"📚⬆️🪑",q:"Buku ada ___ meja.",opts:["bawah","atas","dalam"],ans:1,wp:"Tulis jawapan:"},
+{img:"🐱📦",q:"Kucing ada ___ kotak.",opts:["atas","luar","dalam"],ans:2,wp:"Tulis jawapan:"},
+{img:"🚗🏠",q:"Kereta parkir ___ rumah.",opts:["belakang","depan","atas"],ans:1,wp:"Tulis jawapan:"},
+{img:"🏫➡️🏪",q:"Sekolah ada di ___ pasar.",opts:["kiri","atas","kanan"],ans:2,wp:"Tulis jawapan:"}
+]},
+{type:"grammar",title:"✏️ Kata Ganti Nama Diri",sub:"Pilih kata ganti nama diri yang betul.",passage:"saya · awak · dia · mereka · kami · kita",qs:[
+{img:"👧💬",q:"Siti cakap: \"___ suka makan nasi.\"",opts:["Dia","Saya","Awak"],ans:1,wp:"Tulis jawapan:"},
+{img:"👦➡️👧",q:"Ali cerita pasal Siti: \"___ pandai menyanyi.\"",opts:["Saya","Kami","Dia"],ans:2,wp:"Tulis jawapan:"},
+{img:"👫💬👩",q:"Ali dan Siti kata kepada ibu: \"___ nak pergi zoo!\"",opts:["Mereka","Kami","Kita"],ans:1,wp:"Tulis jawapan:"},
+{img:"👩💬👫",q:"Ibu kata kepada mereka: \"___ semua pergi zoo esok!\"",opts:["Kami","Kita","Mereka"],ans:1,wp:"Tulis jawapan:"}
+]}
+]}
+];
+
+var s={u:0,p:0};
+var A={};
+var L=["A","B","C","D"];
+
+function key(u,p,q){return u+"-"+p+"-"+q;}
+function getScore(){var c=0;Object.keys(A).forEach(function(k){if(A[k]&&A[k].ok)c++;});return c;}
+function goUnit(i){s.u=i;s.p=0;render();}
+function goNext(){var pg=W[s.u].pages;if(s.p<pg.length-1){s.p++;render();}}
+function goPrev(){if(s.p>0){s.p--;render();}}
+function choose(qi,oi){
+  var k=key(s.u,s.p,qi);
+  if(A[k])return;
+  var q=W[s.u].pages[s.p].qs[qi];
+  A[k]={chosen:oi,ok:oi===q.ans};
+  render();
+}
+function render(){
+  var unit=W[s.u];
+  var page=unit.pages[s.p];
+  var totalP=unit.pages.length;
+  document.getElementById("ubar").innerHTML=W.map(function(u,i){
+    return '<button class="ubtn'+(i===s.u?" on":"")+'" onclick="goUnit('+i+')">'+u.em+" "+u.lbl+"</button>";
+  }).join("");
+  var h="";
+  h+='<div class="topbar"><span class="ulbl">'+unit.title+" &middot; Halaman "+(s.p+1)+" / "+totalP+'</span><span class="stag">&#11088; '+getScore()+" betul</span></div>";
+  h+='<div class="ph"><p class="ph-t">'+page.title+'</p><p class="ph-s">'+page.sub+"</p></div>";
+  if(page.passage){
+    var ptext=page.passage.replace(/\n/g,"<br>");
+    h+='<div class="passage">'+(page.type==="read"?"&#128214; ":"")+ptext+"</div>";
+  }
+  for(var qi=0;qi<page.qs.length;qi++){
+    var q=page.qs[qi];
+    var k=key(s.u,s.p,qi);
+    var a=A[k];
+    h+='<div class="qcard">';
+    if(q.img)h+='<span class="qi">'+q.img+"</span>";
+    h+='<p class="qt">'+(qi+1)+". "+q.q+"</p><div class=\"opts\">";
+    for(var oi=0;oi<q.opts.length;oi++){
+      var cls="opt";
+      if(a){if(oi===q.ans)cls+=" good";else if(oi===a.chosen&&oi!==q.ans)cls+=" bad";}
+      h+='<button class="'+cls+'" onclick="choose('+qi+','+oi+')" '+(a?"disabled":"")+">"+L[oi]+". "+q.opts[oi]+"</button>";
+    }
+    h+="</div>";
+    if(a){
+      var correct=q.opts[q.ans];
+      var msg=a.ok?("&#9989; Betul! Jawapan: <strong>"+correct+"</strong>"):("&#10060; Jawapan yang betul: <strong>"+correct+"</strong>");
+      h+='<p class="fb '+(a.ok?"ok":"no")+'">'+msg+'</p><div class="wa"><p class="wa-lbl">&#9998; '+q.wp+'</p><input class="wa-in" type="text" placeholder="'+correct+'..."></div>';
+    }
+    h+="</div>";
+  }
+  var dots="";
+  for(var i=0;i<totalP;i++)dots+='<div class="dot'+(i===s.p?" on":"")+'"></div>';
+  h+='<div class="pnav"><button class="nbtn" onclick="goPrev()" '+(s.p===0?"disabled":"")+">&#8592; Sebelum</button><div class=\"pdots\">"+dots+'</div><button class="nbtn" onclick="goNext()" '+(s.p===totalP-1?"disabled":"")+">Seterusnya &#8594;</button></div>";
+  document.getElementById("con").innerHTML=h;
+}
+render();
+</script>
+</body>
+</html>

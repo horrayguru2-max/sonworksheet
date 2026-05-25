@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Grammar K1 — Interactive Worksheet</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:#f9f9f7;min-height:100vh;display:flex;justify-content:center;padding:24px 16px}
+#app{width:100%;max-width:700px}
+h1{font-size:17px;font-weight:600;color:#111;margin-bottom:4px}
+.subtitle{font-size:13px;color:#888;margin-bottom:20px}
+#wb{max-width:700px}
+.ubar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid #e5e5e5}
+.ubtn{padding:6px 13px;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer;font-size:12px;color:#666;font-family:inherit;transition:all .15s}
+.ubtn.on{background:#e8f0fe;color:#1a56db;border-color:transparent;font-weight:600}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.ulbl{font-size:11px;color:#aaa;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+.stag{background:#fef3c7;color:#92400e;font-size:12px;padding:3px 10px;border-radius:8px;font-weight:600}
+.ph{margin-bottom:14px}
+.ph-t{font-size:19px;font-weight:600;color:#111;margin:0 0 3px}
+.ph-s{font-size:13px;color:#888;margin:0}
+.passage{background:#f5f5f2;border-radius:10px;padding:13px 16px;margin-bottom:13px;font-size:14px;line-height:1.8;color:#222;border-left:3px solid #ccc}
+.qcard{background:#fff;border:1px solid #e8e8e8;border-radius:12px;padding:15px 18px;margin-bottom:11px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.qi{font-size:34px;display:block;margin-bottom:6px;line-height:1.3}
+.qt{font-size:15px;font-weight:600;color:#111;margin:0 0 11px;line-height:1.4}
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opt{padding:9px 15px;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer;font-size:14px;color:#333;font-family:inherit;transition:all .15s}
+.opt:not(:disabled):hover{background:#f5f5f2;border-color:#bbb}
+.opt.good{background:#d1fae5;color:#065f46;border-color:transparent;font-weight:600}
+.opt.bad{background:#fee2e2;color:#991b1b;border-color:transparent}
+.fb{font-size:13px;margin-top:9px;font-weight:600}
+.fb.ok{color:#059669}.fb.no{color:#dc2626}
+.wa{margin-top:11px}
+.wa-lbl{font-size:12px;color:#888;margin-bottom:5px}
+.wa-in{width:100%;box-sizing:border-box;border:1px solid #ddd;border-radius:8px;padding:8px 12px;font-size:15px;background:#fff;color:#111;font-family:inherit;outline:none}
+.wa-in:focus{border-color:#888}
+.pnav{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:13px;border-top:1px solid #e5e5e5}
+.nbtn{padding:8px 20px;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer;font-size:13px;color:#333;font-family:inherit;transition:all .15s}
+.nbtn:not(:disabled):hover{background:#f5f5f2}
+.nbtn:disabled{opacity:.3;cursor:default}
+.pdots{display:flex;gap:6px;align-items:center}
+.dot{width:7px;height:7px;border-radius:50%;background:#ddd}
+.dot.on{background:#666}
+</style>
+</head>
+<body>
+<div id="app">
+  <h1>📘 English Grammar — Year 1 (Age 6)</h1>
+  <p class="subtitle">My Pals · Units 1–4 · Nouns · Articles · Plurals · Has/Have · Demonstratives · Verb To Be</p>
+  <div id="wb">
+    <div class="ubar" id="ubar"></div>
+    <div id="con"></div>
+  </div>
+</div>
+<script>
+var W=[
+  {id:"u1",lbl:"Unit 1",title:"Going to School",em:"🎒",pages:[
+    {type:"vocab",title:"📦 What is a Noun?",sub:"A noun is a person, place, or thing. Choose the noun!",passage:null,qs:[
+      {img:"🎒",q:"Which word is a noun?",opts:["bag","run","happy"],ans:0,wp:"Write the noun:"},
+      {img:"✏️",q:"Which word is a noun?",opts:["pencil","big","jump"],ans:0,wp:"Write the noun:"},
+      {img:"📚",q:"Which word is a noun?",opts:["book","read","slowly"],ans:0,wp:"Write the noun:"}
+    ]},
+    {type:"grammar",title:"🔤 Articles: a and an",sub:"Use 'a' before consonants. Use 'an' before vowels (a, e, i, o, u).",passage:"💡 a + consonant: a bag, a book, a cat\n💡 an + vowel: an apple, an egg, an orange",qs:[
+      {img:"🍎",q:"I eat ___ apple every day.",opts:["an","a","the"],ans:0,wp:"Write a or an:"},
+      {img:"🐘",q:"I can see ___ elephant.",opts:["an","a","the"],ans:0,wp:"Write a or an:"},
+      {img:"🎒",q:"She has ___ bag.",opts:["a","an","the"],ans:0,wp:"Write a or an:"}
+    ]},
+    {type:"read",title:"📖 Read and Answer",sub:"Read the story. Then choose the correct answer.",passage:"Tom goes to school every day. He puts a book and a pencil in his bag. He sees his teacher at school.",qs:[
+      {img:null,q:"What does Tom put in his bag?",opts:["a book and a pencil","a ball and a bat","a cup and a plate"],ans:0,wp:"Write your answer:"},
+      {img:null,q:"Who does Tom see at school?",opts:["his teacher","his mother","his friend"],ans:0,wp:"Write your answer:"},
+      {img:null,q:"Which word is a noun?",opts:["school","goes","every"],ans:0,wp:"Write the noun:"}
+    ]}
+  ]},
+  {id:"u2",lbl:"Unit 2",title:"My Family and Friends",em:"👨‍👩‍👧",pages:[
+    {type:"grammar",title:"🔢 Singular and Plural",sub:"Add 's' to make most nouns plural. Choose the correct form!",passage:"💡 One cat → Two cats\n💡 One dog → Three dogs\n💡 One book → Many books",qs:[
+      {img:"🐱🐱",q:"Two ___",opts:["cats","cates","cat"],ans:0,wp:"Write the plural:"},
+      {img:"🐶🐶🐶",q:"Three ___",opts:["dogs","dogges","dog"],ans:0,wp:"Write the plural:"},
+      {img:"📚📚",q:"Four ___",opts:["books","bookes","book"],ans:0,wp:"Write the plural:"}
+    ]},
+    {type:"grammar",title:"✋ Has and Have",sub:"Choose 'has' or 'have' to complete each sentence.",passage:"💡 I / You / We / They → HAVE\n💡 He / She / It → HAS",qs:[
+      {img:"👦",q:"I ___ a sister.",opts:["have","has","is"],ans:0,wp:"Write have or has:"},
+      {img:"👧",q:"She ___ a brother.",opts:["has","have","are"],ans:0,wp:"Write have or has:"},
+      {img:"👫",q:"They ___ two friends.",opts:["have","has","is"],ans:0,wp:"Write have or has:"}
+    ]},
+    {type:"read",title:"📖 Read and Answer",sub:"Read the story. Then choose the correct answer.",passage:"My family has three people. I have a mother and a father. My sister has a cute dog.",qs:[
+      {img:null,q:"How many people are in the family?",opts:["three","two","four"],ans:0,wp:"Write your answer:"},
+      {img:null,q:"What does the sister have?",opts:["a cute dog","a cat","a bird"],ans:0,wp:"Write your answer:"},
+      {img:null,q:"What is the plural of 'dog'?",opts:["dogs","doges","dogis"],ans:0,wp:"Write the plural:"}
+    ]}
+  ]},
+  {id:"u3",lbl:"Unit 3",title:"Colors, Shapes and Sizes",em:"🎨",pages:[
+    {type:"grammar",title:"👉 This, That, These, Those",sub:"Near or far? One or many? Choose the correct word.",passage:"💡 NEAR: this (1 thing) / these (many things)\n💡 FAR: that (1 thing) / those (many things)",qs:[
+      {img:"🟥",q:"___ is a red square. (near, one)",opts:["This","That","These"],ans:0,wp:"Write this or that:"},
+      {img:"🟡🟡",q:"___ are yellow circles. (near, many)",opts:["These","Those","This"],ans:0,wp:"Write these or those:"},
+      {img:"🔵",q:"___ is a blue circle. (far, one)",opts:["That","This","Those"],ans:0,wp:"Write this or that:"}
+    ]},
+    {type:"think",title:"🧠 Thinking Game",sub:"Choose the correct word or sentence.",passage:null,qs:[
+      {img:"🔴",q:"I see a big, ___ ball.",opts:["red","run","road"],ans:0,wp:"Write the color:"},
+      {img:null,q:"Which sentence is correct?",opts:["These are my crayons.","These is my crayon.","These am a box."],ans:0,wp:"Write the correct sentence:"},
+      {img:"⭐",q:"Look at ___ star! (it is far away)",opts:["that","this","these"],ans:0,wp:"Write this or that:"}
+    ]},
+    {type:"read",title:"📖 Read and Answer",sub:"Read the story. Then choose the correct answer.",passage:"Look at these shapes! This is a big red circle. Those are small blue squares. That triangle is yellow and far away.",qs:[
+      {img:null,q:"What color is the circle?",opts:["red","blue","yellow"],ans:0,wp:"Write your answer:"},
+      {img:null,q:"What shape is yellow?",opts:["triangle","circle","square"],ans:0,wp:"Write your answer:"},
+      {img:null,q:"Which word shows something far away?",opts:["that","this","these"],ans:0,wp:"Write your answer:"}
+    ]}
+  ]},
+  {id:"u4",lbl:"Unit 4",title:"Caring and Sharing",em:"❤️",pages:[
+    {type:"grammar",title:"🔵 Verb To Be: am, is, are",sub:"Fill in the blank with am, is, or are.",passage:"💡 I → AM\n💡 He / She / It → IS\n💡 You / We / They → ARE",qs:[
+      {img:"😊",q:"I ___ happy today.",opts:["am","is","are"],ans:0,wp:"Write am, is, or are:"},
+      {img:"👧",q:"She ___ my friend.",opts:["is","am","are"],ans:0,wp:"Write am, is, or are:"},
+      {img:"👫",q:"We ___ kind to others.",opts:["are","am","is"],ans:0,wp:"Write am, is, or are:"}
+    ]},
+    {type:"think",title:"🧠 Thinking Game",sub:"Choose the correct word or sentence.",passage:null,qs:[
+      {img:null,q:"Which sentence is correct?",opts:["They are caring.","They is caring.","They am caring."],ans:0,wp:"Write the correct sentence:"},
+      {img:"🧸",q:"He ___ sharing his toys.",opts:["is","are","am"],ans:0,wp:"Write is, are, or am:"},
+      {img:"😊",q:"I ___ a good friend.",opts:["am","is","are"],ans:0,wp:"Write am, is, or are:"}
+    ]},
+    {type:"read",title:"📖 Read and Answer",sub:"Read the story. Then choose the correct answer.",passage:"Ali and Siti are good friends. Ali is kind and sharing. Siti is caring and helpful. They are happy together.",qs:[
+      {img:null,q:"How are Ali and Siti described?",opts:["good friends","bad friends","new friends"],ans:0,wp:"Write your answer:"},
+      {img:null,q:"'They ___ happy together.' Which word fits?",opts:["are","is","am"],ans:0,wp:"Write your answer:"},
+      {img:null,q:"Who is caring and helpful?",opts:["Siti","Ali","Both"],ans:0,wp:"Write your answer:"}
+    ]}
+  ]}
+];
+var s={u:0,p:0};
+var A={};
+var L=["A","B","C","D"];
+function key(u,p,q){return u+"-"+p+"-"+q;}
+function getScore(){var c=0;Object.keys(A).forEach(function(k){if(A[k]&&A[k].ok)c++;});return c;}
+function goUnit(i){s.u=i;s.p=0;render();}
+function goNext(){var pg=W[s.u].pages;if(s.p<pg.length-1){s.p++;render();}}
+function goPrev(){if(s.p>0){s.p--;render();}}
+function choose(qi,oi){
+  var k=key(s.u,s.p,qi);
+  if(A[k])return;
+  var q=W[s.u].pages[s.p].qs[qi];
+  A[k]={chosen:oi,ok:oi===q.ans};
+  render();
+}
+function render(){
+  var unit=W[s.u];var page=unit.pages[s.p];var totalP=unit.pages.length;
+  document.getElementById("ubar").innerHTML=W.map(function(u,i){
+    return '<button class="ubtn'+(i===s.u?" on":"")+'" onclick="goUnit('+i+')">'+u.em+" "+u.lbl+"</button>";
+  }).join("");
+  var h="";
+  h+='<div class="topbar"><span class="ulbl">'+unit.title+" &middot; Page "+(s.p+1)+" / "+totalP+'</span><span class="stag">&#11088; '+getScore()+" correct</span></div>";
+  h+='<div class="ph"><p class="ph-t">'+page.title+'</p><p class="ph-s">'+page.sub+"</p></div>";
+  if(page.passage){
+    var ptext=page.passage.replace(/\n/g,"<br>");
+    h+='<div class="passage">'+(page.type==="read"?"&#128214; ":"")+ptext+"</div>";
+  }
+  for(var qi=0;qi<page.qs.length;qi++){
+    var q=page.qs[qi];var k=key(s.u,s.p,qi);var a=A[k];
+    h+='<div class="qcard">';
+    if(q.img)h+='<span class="qi">'+q.img+"</span>";
+    h+='<p class="qt">'+(qi+1)+". "+q.q+"</p><div class=\"opts\">";
+    for(var oi=0;oi<q.opts.length;oi++){
+      var cls="opt";
+      if(a){if(oi===q.ans)cls+=" good";else if(oi===a.chosen&&oi!==q.ans)cls+=" bad";}
+      h+='<button class="'+cls+'" onclick="choose('+qi+','+oi+')" '+(a?"disabled":"")+">"+L[oi]+". "+q.opts[oi]+"</button>";
+    }
+    h+="</div>";
+    if(a){
+      var correct=q.opts[q.ans];
+      var msg=a.ok?("&#9989; Correct! Answer: <strong>"+correct+"</strong>"):("&#10060; Correct answer: <strong>"+correct+"</strong>");
+      h+='<p class="fb '+(a.ok?"ok":"no")+'">'+msg+'</p><div class="wa"><p class="wa-lbl">&#9998; '+q.wp+'</p><input class="wa-in" type="text" placeholder="'+correct+'..."></div>';
+    }
+    h+="</div>";
+  }
+  var dots="";
+  for(var i=0;i<totalP;i++)dots+='<div class="dot'+(i===s.p?" on":"")+'"></div>';
+  h+='<div class="pnav"><button class="nbtn" onclick="goPrev()" '+(s.p===0?"disabled":"")+">&#8592; Back</button><div class=\"pdots\">"+dots+'</div><button class="nbtn" onclick="goNext()" '+(s.p===totalP-1?"disabled":"")+">Next &#8594;</button></div>";
+  document.getElementById("con").innerHTML=h;
+}
+render();
+</script>
+</body>
+</html>

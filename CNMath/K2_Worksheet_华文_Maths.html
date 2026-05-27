@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>K2 Interactive Worksheet — 华文 & Mathematics</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;padding:12px;background:#f0f4f8;font-family:'Segoe UI',system-ui,sans-serif}
+#wb{max-width:720px;margin:0 auto}
+.hdr{text-align:center;margin-bottom:18px;padding:16px 20px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:16px;color:#fff}
+.hdr h1{margin:0 0 4px;font-size:20px;font-weight:700}
+.hdr p{margin:0;font-size:13px;opacity:.85}
+.card{background:#fff;border-radius:16px;padding:16px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.sbar{display:flex;gap:8px;margin-bottom:14px}
+.sbtn{flex:1;padding:11px 8px;border:2px solid #e2e8f0;border-radius:12px;background:#fff;cursor:pointer;font-size:14px;font-weight:600;color:#718096;text-align:center;transition:all .15s}
+.sbtn.on.cn{background:#fff8f8;color:#c53030;border-color:#fc8181}
+.sbtn.on.math{background:#ebf8ff;color:#2b6cb0;border-color:#63b3ed}
+.ubar{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;padding-bottom:12px;border-bottom:1.5px solid #e2e8f0}
+.ubtn{padding:5px 10px;border:1.5px solid #e2e8f0;border-radius:20px;background:#fff;cursor:pointer;font-size:12px;color:#718096;font-family:inherit;transition:all .12s}
+.ubtn.on{background:#667eea;color:#fff;border-color:#667eea;font-weight:600}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.ulbl{font-size:11px;color:#a0aec0;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+.stag{background:#fffbeb;color:#92400e;font-size:13px;padding:4px 12px;border-radius:20px;font-weight:700;border:1.5px solid #fcd34d}
+.ph{margin-bottom:14px}
+.ph-t{font-size:17px;font-weight:700;color:#2d3748;margin:0 0 3px}
+.ph-s{font-size:13px;color:#718096;margin:0}
+.passage{background:#f7fafc;border-radius:10px;padding:13px 16px;margin-bottom:12px;font-size:15px;line-height:1.85;color:#2d3748;border-left:4px solid #667eea}
+.qcard{background:#f7fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 16px;margin-bottom:10px}
+.qi{font-size:38px;display:block;margin-bottom:6px;line-height:1.2}
+.qt{font-size:15px;font-weight:600;color:#2d3748;margin:0 0 10px;line-height:1.5}
+.opts{display:flex;gap:7px;flex-wrap:wrap}
+.opt{padding:8px 15px;border:1.5px solid #cbd5e0;border-radius:8px;background:#fff;cursor:pointer;font-size:14px;color:#2d3748;font-family:inherit;transition:all .12s;font-weight:500}
+.opt:not(:disabled):hover{background:#ebf8ff;border-color:#90cdf4;transform:translateY(-1px)}
+.opt.good{background:#c6f6d5;color:#22543d;border-color:#68d391;font-weight:700}
+.opt.bad{background:#fed7d7;color:#742a2a;border-color:#fc8181}
+.fb{font-size:13px;margin-top:9px;font-weight:600;padding:6px 10px;border-radius:8px}
+.fb.ok{color:#276749;background:#f0fff4}.fb.no{color:#c53030;background:#fff5f5}
+.wa{margin-top:10px}
+.wa-lbl{font-size:12px;color:#718096;margin-bottom:5px;font-weight:500}
+.wa-in{width:100%;border:1.5px solid #e2e8f0;border-radius:8px;padding:9px 13px;font-size:15px;background:#fff;color:#2d3748;font-family:inherit;outline:none}
+.wa-in:focus{border-color:#667eea}
+.pnav{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:12px;border-top:1.5px solid #e2e8f0}
+.nbtn{padding:8px 20px;border:1.5px solid #e2e8f0;border-radius:10px;background:#fff;cursor:pointer;font-size:13px;color:#4a5568;font-family:inherit;font-weight:600;transition:all .12s}
+.nbtn:not(:disabled):hover{background:#667eea;color:#fff;border-color:#667eea}
+.nbtn:disabled{opacity:.35;cursor:default}
+.pdots{display:flex;gap:6px;align-items:center}
+.dot{width:8px;height:8px;border-radius:50%;background:#e2e8f0;transition:all .2s}
+.dot.on{background:#667eea;width:20px;border-radius:4px}
+</style>
+</head>
+<body>
+<div id="wb">
+  <div class="hdr">
+    <h1>📚 K2 Interactive Worksheet</h1>
+    <p>华文 Units 1–6 + Exam Scope &nbsp;·&nbsp; Mathematics Topics</p>
+  </div>
+  <div class="card">
+    <div class="sbar" id="sbar"></div>
+    <div class="ubar" id="ubar"></div>
+    <div id="con"></div>
+  </div>
+</div>
+<script>
+var SUBS=[
+{id:"cn",lbl:"📚 华文",cls:"cn",units:[
+  {id:"u1",lbl:"感觉",title:"单元1：我的感觉",em:"😊",lang:"cn",pages:[
+    {title:"📖 认字 — 情绪",sub:"认识表达感觉的词语。",passage:null,qs:[
+      {img:"😊",q:"这个表情表示___？",opts:["快乐","难过","生气"],ans:0,wp:"写出答案："},
+      {img:"😢",q:"这个表情表示___？",opts:["快乐","难过","害怕"],ans:1,wp:"写出答案："},
+      {img:"😠",q:"这个表情表示___？",opts:["高兴","生气","害怕"],ans:1,wp:"写出答案："}
+    ]},
+    {title:"🎮 词语游戏",sub:"选出正确的词语填入句子。",passage:null,qs:[
+      {img:null,q:"他得到礼物，他感到___。",opts:["快乐","难过","生气"],ans:0,wp:"写出词语："},
+      {img:null,q:"她哭了，她很___。",opts:["快乐","难过","害怕"],ans:1,wp:"写出词语："},
+      {img:null,q:"小明看到鬼，他很___。",opts:["快乐","生气","害怕"],ans:2,wp:"写出词语："}
+    ]},
+    {title:"📚 阅读理解",sub:"读一读，然后回答问题。",passage:"小红今天得到了一份礼物，她很快乐。妈妈看到她笑，也很开心。",qs:[
+      {img:null,q:"小红今天得到什么？",opts:["礼物","蛋糕","书本"],ans:0,wp:"写出答案："},
+      {img:null,q:"小红的心情怎么样？",opts:["快乐","难过","生气"],ans:0,wp:"写出答案："},
+      {img:null,q:"谁也感到开心？",opts:["爸爸","妈妈","老师"],ans:1,wp:"写出答案："}
+    ]}
+  ]},
+  {id:"u2",lbl:"朋友",title:"单元2：朋友和邻居",em:"👫",lang:"cn",pages:[
+    {title:"📖 认字 — 词语",sub:"认识'朋友'和'邻居'。",passage:null,qs:[
+      {img:"👫",q:"在学校一起玩耍的人是___。",opts:["邻居","朋友","陌生人"],ans:1,wp:"写出答案："},
+      {img:"🏠",q:"住在我家旁边的人是___。",opts:["朋友","老师","邻居"],ans:2,wp:"写出答案："},
+      {img:null,q:"小华和我一起上学，他是我的好___。",opts:["邻居","朋友","老师"],ans:1,wp:"写出答案："}
+    ]},
+    {title:"🎮 词语游戏",sub:"选出正确的词语填入句子。",passage:null,qs:[
+      {img:null,q:"我们住在同一条街，他是我的___。",opts:["邻居","朋友","同学"],ans:0,wp:"写出词语："},
+      {img:null,q:"小明和我在学校玩，他是我的___。",opts:["邻居","朋友","老师"],ans:1,wp:"写出词语："},
+      {img:null,q:"好邻居应该互相___。",opts:["帮助","吵架","逃跑"],ans:0,wp:"写出词语："}
+    ]},
+    {title:"📚 阅读理解",sub:"读一读，然后回答问题。",passage:"小明是我的好朋友。他住在我家旁边，也是我的邻居。我们每天一起上学。",qs:[
+      {img:null,q:"小明是谁？",opts:["我的好朋友","我的老师","我的哥哥"],ans:0,wp:"写出答案："},
+      {img:null,q:"小明住在哪里？",opts:["学校旁边","我家旁边","公园旁边"],ans:1,wp:"写出答案："},
+      {img:null,q:"我们每天一起做什么？",opts:["玩游戏","吃饭","上学"],ans:2,wp:"写出答案："}
+    ]}
+  ]},
+  {id:"u3",lbl:"节日",title:"单元3：节日",em:"🎉",lang:"cn",pages:[
+    {title:"📖 认字 — 节日",sub:"认识各种节日。",passage:null,qs:[
+      {img:"🧧",q:"农历新年也叫___。",opts:["圣诞节","春节","开斋节"],ans:1,wp:"写出答案："},
+      {img:"🎄",q:"这个节日在十二月庆祝。",opts:["春节","开斋节","圣诞节"],ans:2,wp:"写出答案："},
+      {img:"🌙",q:"这是穆斯林庆祝的节日。",opts:["开斋节","春节","屠妖节"],ans:0,wp:"写出答案："}
+    ]},
+    {title:"🎮 词语游戏",sub:"选出正确的词语填入句子。",passage:null,qs:[
+      {img:null,q:"春节时，小朋友会收___。",opts:["蛋糕","红包","礼物"],ans:1,wp:"写出词语："},
+      {img:null,q:"圣诞节时，我们会装饰___。",opts:["年糕","灯笼","圣诞树"],ans:2,wp:"写出词语："},
+      {img:null,q:"开斋节时，大家穿___衣服。",opts:["校服","运动服","传统服装"],ans:2,wp:"写出词语："}
+    ]},
+    {title:"📚 阅读理解",sub:"读一读，然后回答问题。",passage:"春节是很热闹的节日。我们会挂灯笼，还会收红包。小朋友都非常开心！",qs:[
+      {img:null,q:"这篇文章说的是哪个节日？",opts:["开斋节","圣诞节","春节"],ans:2,wp:"写出答案："},
+      {img:null,q:"我们在春节会收什么？",opts:["红包","蛋糕","礼物"],ans:0,wp:"写出答案："},
+      {img:null,q:"春节时我们会挂什么？",opts:["气球","灯笼","旗子"],ans:1,wp:"写出答案："}
+    ]}
+  ]},
+  {id:"u4",lbl:"职业",title:"单元4：职业和制服",em:"👮",lang:"cn",pages:[
+    {title:"📖 认字 — 职业",sub:"认识不同的职业。",passage:null,qs:[
+      {img:"👮",q:"这个人的职业是___。",opts:["医生","老师","警察"],ans:2,wp:"写出答案："},
+      {img:"👨‍⚕️",q:"这个人的职业是___。",opts:["医生","消防员","警察"],ans:0,wp:"写出答案："},
+      {img:"👩‍🏫",q:"这个人在学校教书，她是___。",opts:["护士","老师","警察"],ans:1,wp:"写出答案："}
+    ]},
+    {title:"🎮 词语游戏",sub:"选出正确的词语填入句子。",passage:null,qs:[
+      {img:null,q:"医生穿___上班。",opts:["制服","白大衣","校服"],ans:1,wp:"写出词语："},
+      {img:null,q:"消防员的工作是___。",opts:["看病","教书","救火"],ans:2,wp:"写出词语："},
+      {img:null,q:"警察的工作是___。",opts:["保护市民","盖房子","煮食物"],ans:0,wp:"写出词语："}
+    ]},
+    {title:"📚 阅读理解",sub:"读一读，然后回答问题。",passage:"爸爸是一名医生。他每天穿白大衣上班。他帮助生病的人，是很重要的职业。",qs:[
+      {img:null,q:"爸爸的职业是什么？",opts:["警察","医生","老师"],ans:1,wp:"写出答案："},
+      {img:null,q:"爸爸上班穿什么？",opts:["白大衣","制服","校服"],ans:0,wp:"写出答案："},
+      {img:null,q:"爸爸帮助谁？",opts:["学生","警察","生病的人"],ans:2,wp:"写出答案："}
+    ]}
+  ]},
+  {id:"u5",lbl:"动物",title:"单元5：有趣的动物",em:"🐘",lang:"cn",pages:[
+    {title:"📖 认字 — 动物",sub:"认识有趣的动物。",passage:null,qs:[
+      {img:"🐘",q:"这是什么动物？",opts:["老虎","大象","猴子"],ans:1,wp:"写出答案："},
+      {img:"🐯",q:"这是什么动物？",opts:["猴子","狮子","老虎"],ans:2,wp:"写出答案："},
+      {img:"🐒",q:"这是什么动物？",opts:["猴子","熊猫","狐狸"],ans:0,wp:"写出答案："}
+    ]},
+    {title:"🎮 词语游戏",sub:"选出正确的词语填入句子。",passage:null,qs:[
+      {img:null,q:"大象的___很长。",opts:["鼻子","耳朵","脚"],ans:0,wp:"写出词语："},
+      {img:null,q:"老虎身上有___。",opts:["斑点","条纹","毛发"],ans:1,wp:"写出词语："},
+      {img:null,q:"猴子喜欢吃___。",opts:["肉","青菜","香蕉"],ans:2,wp:"写出词语："}
+    ]},
+    {title:"📚 阅读理解",sub:"读一读，然后回答问题。",passage:"动物园里有很多有趣的动物。大象的鼻子很长，老虎身上有条纹，猴子最喜欢吃香蕉。",qs:[
+      {img:null,q:"大象的哪个部位很长？",opts:["耳朵","鼻子","脚"],ans:1,wp:"写出答案："},
+      {img:null,q:"老虎身上有什么？",opts:["条纹","斑点","毛"],ans:0,wp:"写出答案："},
+      {img:null,q:"猴子喜欢吃什么？",opts:["肉","苹果","香蕉"],ans:2,wp:"写出答案："}
+    ]}
+  ]},
+  {id:"u6",lbl:"运动",title:"单元6：游戏和运动",em:"⚽",lang:"cn",pages:[
+    {title:"📖 认字 — 运动",sub:"认识各种游戏和运动。",passage:null,qs:[
+      {img:"⚽",q:"这是什么运动？",opts:["篮球","足球","游泳"],ans:1,wp:"写出答案："},
+      {img:"🏊",q:"这是什么运动？",opts:["跑步","骑车","游泳"],ans:2,wp:"写出答案："},
+      {img:"🏀",q:"这是什么运动？",opts:["足球","篮球","排球"],ans:1,wp:"写出答案："}
+    ]},
+    {title:"🎮 词语游戏",sub:"选出正确的词语填入句子。",passage:null,qs:[
+      {img:null,q:"踢足球时，我们用___。",opts:["手","脚","头"],ans:1,wp:"写出词语："},
+      {img:null,q:"游泳时，我们在___里游。",opts:["陆地","天空","水"],ans:2,wp:"写出词语："},
+      {img:null,q:"打篮球时，要把球投进___。",opts:["篮框","球门","网"],ans:0,wp:"写出词语："}
+    ]},
+    {title:"📚 阅读理解",sub:"读一读，然后回答问题。",passage:"小明最喜欢踢足球。他每天放学后都和朋友一起踢球。运动让他的身体很健康。",qs:[
+      {img:null,q:"小明最喜欢什么运动？",opts:["篮球","游泳","足球"],ans:2,wp:"写出答案："},
+      {img:null,q:"小明什么时候踢球？",opts:["放学后","上学前","睡觉前"],ans:0,wp:"写出答案："},
+      {img:null,q:"运动对小明有什么好处？",opts:["变高","身体健康","变聪明"],ans:1,wp:"写出答案："}
+    ]}
+  ]},
+  {id:"ex",lbl:"✏️考试",title:"考试：笔画与部首",em:"✏️",lang:"cn",pages:[
+    {title:"✏️ 补笔画 / 数笔画",sub:"说出汉字的正确笔画数。",passage:null,qs:[
+      {img:null,q:"「大」字有几画？",opts:["四画","三画","五画"],ans:1,wp:"写出答案："},
+      {img:null,q:"「山」字有几画？",opts:["三画","二画","四画"],ans:0,wp:"写出答案："},
+      {img:null,q:"「日」字有几画？",opts:["三画","五画","四画"],ans:2,wp:"写出答案："}
+    ]},
+    {title:"🔍 认识部首",sub:"找出汉字的部首。",passage:null,qs:[
+      {img:null,q:"「妈」的部首是___。",opts:["马","女","口"],ans:1,wp:"写出答案："},
+      {img:null,q:"「河」的部首是___。",opts:["氵","可","口"],ans:0,wp:"写出答案："},
+      {img:null,q:"「树」的部首是___。",opts:["寸","又","木"],ans:2,wp:"写出答案："}
+    ]},
+    {title:"🔢 再数笔画",sub:"数一数，写出笔画数。",passage:null,qs:[
+      {img:null,q:"「木」字有几画？",opts:["三画","四画","五画"],ans:1,wp:"写出答案："},
+      {img:null,q:"「人」字有几画？",opts:["二画","三画","四画"],ans:0,wp:"写出答案："},
+      {img:null,q:"「口」字有几画？",opts:["二画","四画","三画"],ans:2,wp:"写出答案："}
+    ]}
+  ]}
+]},
+{id:"math",lbl:"🔢 Mathematics",cls:"math",units:[
+  {id:"m1",lbl:"Numbers",title:"Numbers 1–50",em:"🔢",lang:"en",pages:[
+    {title:"🔢 Number Recognition",sub:"Identify numbers from 1 to 50.",passage:null,qs:[
+      {img:null,q:"What number comes AFTER 19?",opts:["18","20","21"],ans:1,wp:"Write your answer:"},
+      {img:null,q:"Which number is between 14 and 16?",opts:["13","15","17"],ans:1,wp:"Write your answer:"},
+      {img:null,q:"What is 'thirty-five' in numerals?",opts:["53","30","35"],ans:2,wp:"Write your answer:"}
+    ]},
+    {title:"🧠 Number Sense",sub:"Solve these number questions.",passage:null,qs:[
+      {img:null,q:"What number comes BEFORE 50?",opts:["51","48","49"],ans:2,wp:"Write your answer:"},
+      {img:null,q:"41, 42, ___, 44, 45 — what is missing?",opts:["42","43","46"],ans:1,wp:"Write your answer:"},
+      {img:null,q:"Which number is BIGGER: 27 or 32?",opts:["27","32","Equal"],ans:1,wp:"Write your answer:"}
+    ]},
+    {title:"📝 Number Challenge",sub:"Answer these questions.",passage:null,qs:[
+      {img:null,q:"38 is between ___ and ___.",opts:["39 and 41","36 and 38","37 and 39"],ans:2,wp:"Write your answer:"},
+      {img:null,q:"🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎 — How many apples?",opts:["9","10","11"],ans:1,wp:"Write your answer:"},
+      {img:null,q:"Count on: 20, 21, 22, 23, ___.",opts:["22","25","24"],ans:2,wp:"Write your answer:"}
+    ]}
+  ]},
+  {id:"m2",lbl:"Patterns",title:"Patterns",em:"🎨",lang:"en",pages:[
+    {title:"🎨 Colour Patterns",sub:"Find the next item in the pattern.",passage:null,qs:[
+      {img:null,q:"🔴🔵🔴🔵🔴___ — what comes next?",opts:["🔴","🔵","🟡"],ans:1,wp:"Write your answer:"},
+      {img:null,q:"🐱🐶🐱🐶🐱___ — what comes next?",opts:["🐱","🐰","🐶"],ans:2,wp:"Write your answer:"},
+      {img:null,q:"⭐⭐🌙⭐⭐___ — what comes next?",opts:["☀️","⭐","🌙"],ans:2,wp:"Write your answer:"}
+    ]},
+    {title:"🔢 Number Patterns",sub:"Find the missing or next number.",passage:null,qs:[
+      {img:null,q:"1, 3, 5, 7, ___ — what comes next?",opts:["8","9","6"],ans:1,wp:"Write your answer:"},
+      {img:null,q:"2, 4, 6, ___, 10 — what is missing?",opts:["7","9","8"],ans:2,wp:"Write your answer:"},
+      {img:null,q:"10, 20, 30, ___ — what comes next?",opts:["35","50","40"],ans:2,wp:"Write your answer:"}
+    ]},
+    {title:"🎮 Pattern Challenge",sub:"Choose the correct answer.",passage:null,qs:[
+      {img:null,q:"🟠🟠🟢🟠🟠___ — what comes next?",opts:["🟠","🔵","🟢"],ans:2,wp:"Write your answer:"},
+      {img:null,q:"5, 10, 15, 20, ___ — what comes next?",opts:["22","25","30"],ans:1,wp:"Write your answer:"},
+      {img:null,q:"Which shows an AB pattern?",opts:["Red,Red,Blue,Blue","Red,Blue,Red,Blue","Blue,Blue,Red"],ans:1,wp:"Write your answer:"}
+    ]}
+  ]},
+  {id:"m3",lbl:"Order",title:"Ascending & Descending",em:"📊",lang:"en",pages:[
+    {title:"📈 Ascending Order",sub:"Arrange numbers from smallest to biggest.",passage:null,qs:[
+      {img:null,q:"Which shows ASCENDING order?",opts:["20, 12, 7, 3","7, 3, 12, 20","3, 7, 12, 20"],ans:2,wp:"Write your answer:"},
+      {img:null,q:"Arrange 19, 4, 37, 22 smallest first — what comes FIRST?",opts:["19","4","22"],ans:1,wp:"Write your answer:"},
+      {img:null,q:"8, ___, 24, 32 (ascending) — what is missing?",opts:["12","16","20"],ans:1,wp:"Write your answer:"}
+    ]},
+    {title:"📉 Descending Order",sub:"Arrange numbers from biggest to smallest.",passage:null,qs:[
+      {img:null,q:"Which shows DESCENDING order?",opts:["5, 15, 30, 45","45, 30, 15, 5","30, 5, 45, 15"],ans:1,wp:"Write your answer:"},
+      {img:null,q:"Arrange 11, 35, 8, 29 biggest first — what comes FIRST?",opts:["29","11","35"],ans:2,wp:"Write your answer:"},
+      {img:null,q:"47, 41, ___, 29, 23 (descending) — what is missing?",opts:["37","35","33"],ans:1,wp:"Write your answer:"}
+    ]},
+    {title:"🏆 Order Challenge",sub:"Answer these questions.",passage:null,qs:[
+      {img:null,q:"Which is the SMALLEST? 43, 34, 40, 38",opts:["34","38","40"],ans:0,wp:"Write your answer:"},
+      {img:null,q:"Which is the BIGGEST? 25, 47, 38, 12",opts:["38","25","47"],ans:2,wp:"Write your answer:"},
+      {img:null,q:"14, 28, 7, 35 — arranged smallest to biggest, what comes LAST?",opts:["28","35","14"],ans:1,wp:"Write your answer:"}
+    ]}
+  ]},
+  {id:"m4",lbl:"Tens&Ones",title:"Tens & Ones",em:"🔟",lang:"en",pages:[
+    {title:"🔟 Identify Tens & Ones",sub:"Understand place value.",passage:null,qs:[
+      {img:null,q:"23 has ___ tens and ___ ones.",opts:["3 tens 2 ones","2 tens 3 ones","2 tens 0 ones"],ans:1,wp:"Write your answer:"},
+      {img:null,q:"40 has ___ tens and ___ ones.",opts:["0 tens 4 ones","4 tens 4 ones","4 tens 0 ones"],ans:2,wp:"Write your answer:"},
+      {img:null,q:"1 ten and 7 ones = ___.",opts:["71","10","17"],ans:2,wp:"Write your answer:"}
+    ]},
+    {title:"🧮 Convert Place Value",sub:"Convert between tens and ones.",passage:null,qs:[
+      {img:null,q:"4 tens and 2 ones = ___.",opts:["24","42","40"],ans:1,wp:"Write your answer:"},
+      {img:null,q:"Which number has 1 ten and 8 ones?",opts:["81","10","18"],ans:2,wp:"Write your answer:"},
+      {img:null,q:"35 = ___ tens and ___ ones.",opts:["3 tens 5 ones","5 tens 3 ones","30 tens 5 ones"],ans:0,wp:"Write your answer:"}
+    ]},
+    {title:"🎯 Tens & Ones Challenge",sub:"Answer these questions.",passage:null,qs:[
+      {img:null,q:"2 tens and 9 ones = ___.",opts:["92","29","20"],ans:1,wp:"Write your answer:"},
+      {img:null,q:"Which has MORE tens — 27 or 34?",opts:["27","Same","34"],ans:2,wp:"Write your answer:"},
+      {img:null,q:"How many tens are in 50?",opts:["4 tens","0 tens","5 tens"],ans:2,wp:"Write your answer:"}
+    ]}
+  ]},
+  {id:"m5",lbl:"➕ Add",title:"Addition",em:"➕",lang:"en",pages:[
+    {title:"➕ Basic Addition",sub:"Add the numbers.",passage:null,qs:[
+      {img:null,q:"🍎🍎🍎 + 🍎🍎 = ?",opts:["6","5","4"],ans:1,wp:"Write your answer:"},
+      {img:null,q:"12 + 5 = ?",opts:["15","16","17"],ans:2,wp:"Write your answer:"},
+      {img:null,q:"20 + 10 = ?",opts:["25","30","28"],ans:1,wp:"Write your answer:"}
+    ]},
+    {title:"📖 Addition Word Problems",sub:"Read and solve.",passage:null,qs:[
+      {img:null,q:"There are 13 boys and 12 girls. How many pupils altogether?",opts:["23","25","26"],ans:1,wp:"Write your answer:"},
+      {img:null,q:"Raju has 15 marbles. He finds 8 more. How many now?",opts:["22","23","24"],ans:1,wp:"Write your answer:"},
+      {img:null,q:"31 + 7 = ?",opts:["37","38","39"],ans:1,wp:"Write your answer:"}
+    ]},
+    {title:"🎯 Addition Challenge",sub:"Solve these additions.",passage:null,qs:[
+      {img:null,q:"14 + 16 = ?",opts:["28","30","32"],ans:1,wp:"Write your answer:"},
+      {img:null,q:"25 + 13 = ?",opts:["36","38","40"],ans:1,wp:"Write your answer:"},
+      {img:null,q:"17 + 22 = ?",opts:["37","39","41"],ans:1,wp:"Write your answer:"}
+    ]}
+  ]},
+  {id:"m6",lbl:"➖ Sub",title:"Subtraction",em:"➖",lang:"en",pages:[
+    {title:"➖ Basic Subtraction",sub:"Subtract the numbers.",passage:null,qs:[
+      {img:null,q:"🍌🍌🍌🍌🍌 − 🍌🍌 = ?",opts:["4","3","2"],ans:1,wp:"Write your answer:"},
+      {img:null,q:"15 − 6 = ?",opts:["8","9","10"],ans:1,wp:"Write your answer:"},
+      {img:null,q:"20 − 10 = ?",opts:["8","10","12"],ans:1,wp:"Write your answer:"}
+    ]},
+    {title:"📖 Subtraction Word Problems",sub:"Read and solve.",passage:null,qs:[
+      {img:null,q:"Siti has 18 stickers. She gives 5 away. How many left?",opts:["12","13","14"],ans:1,wp:"Write your answer:"},
+      {img:null,q:"25 balloons — 7 pop. How many are left?",opts:["17","18","19"],ans:1,wp:"Write your answer:"},
+      {img:null,q:"30 − 14 = ?",opts:["15","16","17"],ans:1,wp:"Write your answer:"}
+    ]},
+    {title:"🎯 Subtraction Challenge",sub:"Solve these subtractions.",passage:null,qs:[
+      {img:null,q:"40 − 20 = ?",opts:["18","20","22"],ans:1,wp:"Write your answer:"},
+      {img:null,q:"48 − 13 = ?",opts:["33","35","37"],ans:1,wp:"Write your answer:"},
+      {img:null,q:"50 − 27 = ?",opts:["21","23","25"],ans:1,wp:"Write your answer:"}
+    ]}
+  ]},
+  {id:"m7",lbl:"Shapes",title:"2D & 3D Shapes",em:"🔷",lang:"en",pages:[
+    {title:"🔷 2D Shapes",sub:"Identify flat (2D) shapes.",passage:null,qs:[
+      {img:"🔵",q:"This shape has NO corners. What is it?",opts:["Circle","Square","Triangle"],ans:0,wp:"Write your answer:"},
+      {img:"🔺",q:"This shape has 3 sides. What is it?",opts:["Rectangle","Circle","Triangle"],ans:2,wp:"Write your answer:"},
+      {img:"⬛",q:"This shape has 4 EQUAL sides. What is it?",opts:["Rectangle","Square","Triangle"],ans:1,wp:"Write your answer:"}
+    ]},
+    {title:"📦 3D Shapes",sub:"Identify solid (3D) shapes.",passage:null,qs:[
+      {img:"🎲",q:"A dice looks like a ___.",opts:["Sphere","Cube","Cone"],ans:1,wp:"Write your answer:"},
+      {img:"⚽",q:"A ball looks like a ___.",opts:["Sphere","Cube","Cone"],ans:0,wp:"Write your answer:"},
+      {img:"🍦",q:"An ice cream cone looks like a ___.",opts:["Cylinder","Cube","Cone"],ans:2,wp:"Write your answer:"}
+    ]},
+    {title:"🎯 Shapes Challenge",sub:"Answer these shape questions.",passage:null,qs:[
+      {img:null,q:"How many sides does a rectangle have?",opts:["3","4","6"],ans:1,wp:"Write your answer:"},
+      {img:null,q:"Which shape has NO flat faces?",opts:["Sphere","Cube","Cuboid"],ans:0,wp:"Write your answer:"},
+      {img:null,q:"Which is a 3D shape?",opts:["Square","Circle","Cube"],ans:2,wp:"Write your answer:"}
+    ]}
+  ]}
+]}
+];
+
+var s={sub:0,u:0,p:0};
+var A={};
+var L=["A","B","C"];
+
+function key(si,ui,pi,qi){return SUBS[si].id+"-"+ui+"-"+pi+"-"+qi;}
+function curSub(){return SUBS[s.sub];}
+function curUnit(){return curSub().units[s.u];}
+function curPage(){return curUnit().pages[s.p];}
+function getScore(){var c=0;Object.keys(A).forEach(function(k){if(A[k]&&A[k].ok)c++;});return c;}
+function getTot(){var t=0;Object.keys(A).forEach(function(){t++;});return t;}
+
+function goSub(i){s.sub=i;s.u=0;s.p=0;render();}
+function goUnit(i){s.u=i;s.p=0;render();}
+function goNext(){var pg=curUnit().pages;if(s.p<pg.length-1){s.p++;render();}}
+function goPrev(){if(s.p>0){s.p--;render();}}
+
+function choose(qi,oi){
+  var k=key(s.sub,s.u,s.p,qi);
+  if(A[k])return;
+  var q=curPage().qs[qi];
+  A[k]={chosen:oi,ok:oi===q.ans};
+  render();
+}
+
+function render(){
+  var sub=curSub();
+  var unit=curUnit();
+  var page=curPage();
+  var totalP=unit.pages.length;
+  var isCN=unit.lang==="cn";
+
+  // Subject bar
+  var sh="";
+  SUBS.forEach(function(sb,i){
+    sh+='<button class="sbtn'+(i===s.sub?" on "+sb.cls:"")+'" onclick="goSub('+i+')">'+sb.lbl+"</button>";
+  });
+  document.getElementById("sbar").innerHTML=sh;
+
+  // Unit bar
+  var units=sub.units;
+  var uh="";
+  units.forEach(function(u,i){
+    uh+='<button class="ubtn'+(i===s.u?" on":"")+'" onclick="goUnit('+i+')">'+u.em+" "+u.lbl+"</button>";
+  });
+  document.getElementById("ubar").innerHTML=uh;
+
+  // Content
+  var h="";
+  h+='<div class="topbar">';
+  h+='<span class="ulbl">'+unit.title+' &middot; '+(isCN?"第":"Page ")+(s.p+1)+(isCN?" / ":"/")+totalP+(isCN?"页":"")+'</span>';
+  h+='<span class="stag">⭐ '+getScore()+(isCN?" 对":" correct")+"</span>";
+  h+="</div>";
+  h+='<div class="ph"><p class="ph-t">'+page.title+'</p><p class="ph-s">'+page.sub+"</p></div>";
+  if(page.passage){
+    h+='<div class="passage">'+page.passage.replace(/\n/g,"<br>")+"</div>";
+  }
+  for(var qi=0;qi<page.qs.length;qi++){
+    var q=page.qs[qi];
+    var k=key(s.sub,s.u,s.p,qi);
+    var a=A[k];
+    h+='<div class="qcard">';
+    if(q.img)h+='<span class="qi">'+q.img+"</span>";
+    h+='<p class="qt">'+(qi+1)+". "+q.q+"</p><div class=\"opts\">";
+    for(var oi=0;oi<q.opts.length;oi++){
+      var cls="opt";
+      if(a){if(oi===q.ans)cls+=" good";else if(oi===a.chosen&&oi!==q.ans)cls+=" bad";}
+      h+='<button class="'+cls+'" onclick="choose('+qi+','+oi+')" '+(a?"disabled":"")+">"+L[oi]+". "+q.opts[oi]+"</button>";
+    }
+    h+="</div>";
+    if(a){
+      var correct=q.opts[q.ans];
+      var msg=isCN
+        ?(a.ok?"✅ 答对了！答案：<strong>"+correct+"</strong>":"❌ 正确答案：<strong>"+correct+"</strong>")
+        :(a.ok?"✅ Correct! Answer: <strong>"+correct+"</strong>":"❌ Correct answer: <strong>"+correct+"</strong>");
+      h+='<p class="fb '+(a.ok?"ok":"no")+'">'+msg+"</p>";
+      h+='<div class="wa"><p class="wa-lbl">✏️ '+q.wp+'</p><input class="wa-in" type="text" placeholder="'+correct+'..."></div>';
+    }
+    h+="</div>";
+  }
+  var dots="";
+  for(var i=0;i<totalP;i++)dots+='<div class="dot'+(i===s.p?" on":"")+'"></div>';
+  h+='<div class="pnav">';
+  h+='<button class="nbtn" onclick="goPrev()" '+(s.p===0?"disabled":"")+">← "+(isCN?"上一页":"Back")+"</button>";
+  h+='<div class="pdots">'+dots+"</div>";
+  h+='<button class="nbtn" onclick="goNext()" '+(s.p===totalP-1?"disabled":"")+">"+(isCN?"下一页":"Next")+" →</button>";
+  h+="</div>";
+  document.getElementById("con").innerHTML=h;
+}
+render();
+</script>
+</body>
+</html>
